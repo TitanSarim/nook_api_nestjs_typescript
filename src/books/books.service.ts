@@ -33,4 +33,26 @@ export class BooksService {
 
     return book;
   }
+
+  async update(id: string, body: Book): Promise<Book> {
+    const bookObj = await this.repo.findOne({ where: { id: id } });
+
+    if (!bookObj) {
+      throw new NotFoundException('Book not found');
+    }
+
+    Object.assign(bookObj, body);
+
+    return this.repo.save(bookObj);
+  }
+
+  async remove(id: string) {
+    const bookObj = await this.repo.findOne({ where: { id: id } });
+
+    if (!bookObj) {
+      throw new NotFoundException('Book not found');
+    }
+
+    return this.repo.remove(bookObj);
+  }
 }
